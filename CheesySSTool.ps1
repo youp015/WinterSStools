@@ -158,7 +158,7 @@ $ToolData = @(
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="=^.^=" FontSize="14" FontWeight="Bold" Foreground="{StaticResource Accent}" FontFamily="Consolas"/>
                         <TextBlock Text="  CheesySSTool" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextMain}"/>
-                        <TextBlock Text="  -  By Cheese Cat" FontSize="11" Foreground="{StaticResource TextMuted}" VerticalAlignment="Center" Margin="4,0,0,0"/>
+                        <TextBlock Text="  -  by cheese cat" FontSize="11" Foreground="{StaticResource TextMuted}" VerticalAlignment="Center" Margin="4,0,0,0"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                         <Button x:Name="MinBtn"   Style="{StaticResource TitleBtn}" Content="_"/>
@@ -681,17 +681,7 @@ $OpenCmdBtn.Add_Click({
     Write-Log "Opened CMD."
 })
 
-# ==============================================================================
-# STARTUP LOG
-# ==============================================================================
-Write-Log "+------------------------------------------+"
-Write-Log "|  CheesySSTool  =^.^=  v2.0 (WPF)        |"
-Write-Log "|  Cat and Cheese Toolkit                  |"
-Write-Log "+------------------------------------------+"
-Write-Log "$($ToolData.Count) tools loaded across $($Categories.Count) categories."
-Write-Log "GitHub/Web tools download in background - UI stays responsive."
 Write-Log "Files saved to: $installDir"
-Write-Log "Ready. Meow!"
 
 Set-Status "Ready" "Select a tool to launch or download it." "IDLE"
 
