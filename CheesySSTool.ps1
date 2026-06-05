@@ -195,19 +195,10 @@ $ToolData = @(
 
                         <Separator Background="#3D2E00" Margin="0,10,0,10"/>
 
-                        <TextBlock Text="LEGEND" FontSize="9" FontWeight="Bold" Foreground="{StaticResource TextMuted}" Margin="4,0,0,6"/>
-                        <StackPanel Orientation="Horizontal" Margin="4,2">
-                            <Border Width="12" Height="12" Background="{StaticResource Ps1Bg}" CornerRadius="2" Margin="0,0,6,0"/>
-                            <TextBlock Text="PS Script" FontSize="10" Foreground="{StaticResource TextMuted}"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="4,2">
-                            <Border Width="12" Height="12" Background="{StaticResource GhBg}" CornerRadius="2" Margin="0,0,6,0"/>
-                            <TextBlock Text="GitHub (auto-download)" FontSize="10" Foreground="{StaticResource TextMuted}"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="4,2">
-                            <Border Width="12" Height="12" Background="{StaticResource WebBg}" CornerRadius="2" Margin="0,0,6,0"/>
-                            <TextBlock Text="Web / Direct DL" FontSize="10" Foreground="{StaticResource TextMuted}"/>
-                        </StackPanel>
+                        <TextBlock Text="CREDITS" FontSize="9" FontWeight="Bold" Foreground="{StaticResource TextMuted}" Margin="4,0,0,6"/>
+                        <TextBlock Text="Made by cheese_cat0" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextMain}" Margin="4,2,0,4"/>
+                        <TextBlock Text="Discord: cheese_cat0" FontSize="10" Foreground="{StaticResource TextMuted}" TextWrapping="Wrap" Margin="4,1,0,0"/>
+                        <TextBlock Text="GitHub: cheesecatlol" FontSize="10" Foreground="{StaticResource TextMuted}" TextWrapping="Wrap" Margin="4,1,0,0"/>
 
                         <Separator Background="#3D2E00" Margin="0,10,0,10"/>
                         <TextBlock x:Name="InstPathBlock" Text="" FontSize="9" Foreground="#5A4010" TextWrapping="Wrap" Margin="4,0"/>
