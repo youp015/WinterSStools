@@ -2,6 +2,7 @@ Add-Type -AssemblyName PresentationFramework
 Add-Type -AssemblyName PresentationCore
 Add-Type -AssemblyName WindowsBase
 Add-Type -AssemblyName System.Xaml
+Add-Type -AssemblyName System.Windows.Forms
 
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
@@ -630,85 +631,62 @@ foreach ($cat in $Categories) {
             $tName      = $clickedBtn.Content
             $tData      = $ToolData | Where-Object { $_.Name -eq $tName } | Select-Object -First 1
 
-            # --- Flash animation via DispatcherTimer (stays on UI thread) ---
+            # --- Flash animation: inline, forces UI refresh with DoEvents ---
             $origBg = $clickedBtn.Background
             $origFg = $clickedBtn.Foreground
             $origW  = $clickedBtn.Width
             $origH  = $clickedBtn.Height
 
-            $flashSteps = @(
-                @{ bg="#F5C200"; fg="#0F0B00"; ws=0.93 },
-                @{ bg="#FFFFFF"; fg="#0F0B00"; ws=0.97 },
-                @{ bg="#F5C200"; fg="#0F0B00"; ws=1.04 },
-                @{ bg=$origBg;   fg=$origFg;   ws=1.0  }
+            $frames = @(
+                @("#F5C200","#0F0B00",0.93),
+                @("#FFFFFF","#0F0B00",0.97),
+                @("#F5C200","#0F0B00",1.04),
+                @($origBg,  $origFg,  1.0 )
             )
-            $script:flashIndex = 0
-            $script:flashBtn   = $clickedBtn
-            $script:flashOrigW = $origW
-            $script:flashOrigH = $origH
+            foreach ($frame in $frames) {
+                $clickedBtn.Background = $frame[0]
+                $clickedBtn.Foreground = $frame[1]
+                $clickedBtn.Width      = [Math]::Round($origW * $frame[2])
+                $clickedBtn.Height     = [Math]::Round($origH * $frame[2])
+                [System.Windows.Forms.Application]::DoEvents()
+                Start-Sleep -Milliseconds 60
+            }
+            $clickedBtn.Width  = $origW
+            $clickedBtn.Height = $origH
 
-            $flashTimer = New-Object System.Windows.Threading.DispatcherTimer
-            $flashTimer.Interval = [TimeSpan]::FromMilliseconds(70)
-
-            # Capture tool data for use after animation
-            $script:pendingToolData = $tData
-
-            $flashTimer.Add_Tick({
-                $step = $flashSteps[$script:flashIndex]
-                $w    = [Math]::Round($script:flashOrigW * $step.ws)
-                $h    = [Math]::Round($script:flashOrigH * $step.ws)
-                $script:flashBtn.Background = $step.bg
-                $script:flashBtn.Foreground = $step.fg
-                $script:flashBtn.Width      = $w
-                $script:flashBtn.Height     = $h
-
-                $script:flashIndex++
-                if ($script:flashIndex -ge $flashSteps.Count) {
-                    $flashTimer.Stop()
-                    # Restore exact original size
-                    $script:flashBtn.Width  = $script:flashOrigW
-                    $script:flashBtn.Height = $script:flashOrigH
-
-                    # --- Run tool logic after animation finishes ---
-                    $td = $script:pendingToolData
-                    $tn = $td.Name
-
-                    if ($td.Type -eq "Cmd") {
-                        Set-Status "Running" "Launching $tn..." "BUSY"
-                        Write-Log "Starting: $tn"
-                        try {
-                            Start-CmdToolCommand -Command $td.Command
-                            Write-Log "Launched: $tn"
-                            Set-Status "Ready" "$tn launched." "IDLE"
-                        } catch {
-                            Write-Log "Error: $_"
-                            Set-Status "Error" "Failed to launch $tn." "ERR"
-                        }
-                    }
-                    elseif ($td.Type -eq "GitHub") {
-                        Set-Status "Downloading" "Fetching $tn..." "BUSY"
-                        Write-Log "Starting download: $tn"
-                        try {
-                            Invoke-ToolDownloadAndRun -tool $td
-                        } catch {
-                            Write-Log "Unexpected error: $_"
-                            Set-Status "Error" "Something went wrong." "ERR"
-                        }
-                    }
-                    elseif ($td.Type -eq "Web") {
-                        Set-Status "Downloading" "Fetching $tn..." "BUSY"
-                        Write-Log "Starting: $tn"
-                        try {
-                            Invoke-WebToolDownload -tool $td
-                        } catch {
-                            Write-Log "Unexpected error: $_"
-                            Set-Status "Error" "Something went wrong." "ERR"
-                        }
-                    }
+            # --- Tool logic ---
+            if ($tData.Type -eq "Cmd") {
+                Set-Status "Running" "Launching $tName..." "BUSY"
+                Write-Log "Starting: $tName"
+                try {
+                    Start-CmdToolCommand -Command $tData.Command
+                    Write-Log "Launched: $tName"
+                    Set-Status "Ready" "$tName launched." "IDLE"
+                } catch {
+                    Write-Log "Error: $_"
+                    Set-Status "Error" "Failed to launch $tName." "ERR"
                 }
-            })
-
-            $flashTimer.Start()
+            }
+            elseif ($tData.Type -eq "GitHub") {
+                Set-Status "Downloading" "Fetching $tName..." "BUSY"
+                Write-Log "Starting download: $tName"
+                try {
+                    Invoke-ToolDownloadAndRun -tool $tData
+                } catch {
+                    Write-Log "Unexpected error: $_"
+                    Set-Status "Error" "Something went wrong." "ERR"
+                }
+            }
+            elseif ($tData.Type -eq "Web") {
+                Set-Status "Downloading" "Fetching $tName..." "BUSY"
+                Write-Log "Starting: $tName"
+                try {
+                    Invoke-WebToolDownload -tool $tData
+                } catch {
+                    Write-Log "Unexpected error: $_"
+                    Set-Status "Error" "Something went wrong." "ERR"
+                }
+            }
         })
 
         $wrap.Children.Add($btn) | Out-Null
