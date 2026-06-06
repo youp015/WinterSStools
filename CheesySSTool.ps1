@@ -66,7 +66,10 @@ $ToolData = @(
     @{ Name="RegistryExplorer";      Category="Zimmerman"; Type="Web"; URL="https://download.ericzimmermanstools.com/net9/RegistryExplorer.zip" },
     @{ Name="ShellBagsExplorer";     Category="Zimmerman"; Type="Web"; URL="https://download.ericzimmermanstools.com/net9/ShellBagsExplorer.zip" },
     @{ Name="SrumECmd";              Category="Zimmerman"; Type="Web"; URL="https://download.ericzimmermanstools.com/net9/SrumECmd.zip" },
-    @{ Name="TimelineExplorer";      Category="Zimmerman"; Type="Web"; URL="https://download.ericzimmermanstools.com/net9/TimelineExplorer.zip" }
+    @{ Name="TimelineExplorer";      Category="Zimmerman"; Type="Web"; URL="https://download.ericzimmermanstools.com/net9/TimelineExplorer.zip" },
+    @{ Name="NET 9.0";    Category="Dependencies"; Type="Web"; URL="https://download.visualstudio.microsoft.com/download/pr/92dba916-bc51-4e76-8b0e-d41d37ce5fa4/ab08f3e95bf7a3d3da336a7e8c8eca63/dotnet-sdk-9.0.203-win-x64.exe" },
+    @{ Name="NET 10.0";   Category="Dependencies"; Type="Web"; URL="https://download.visualstudio.microsoft.com/download/pr/b3f93f0e-9e5e-4b4c-a4c4-36db0c4b0e3e/dotnet-runtime-10.0.0-win-x64.exe" },
+    @{ Name="VSRedist";   Category="Dependencies"; Type="Web"; URL="https://aka.ms/vs/17/release/vc_redist.x64.exe" }
 )
 
 # ==============================================================================
@@ -589,7 +592,7 @@ function Start-ButtonAnimation {
 # ==============================================================================
 # POPULATE TABS
 # ==============================================================================
-$Categories = @("Orbdiff","Spokwn","Tonynoh","Praiselily","RedLotus","Others","Zimmerman")
+$Categories = @("Orbdiff","Spokwn","Tonynoh","Praiselily","RedLotus","Others","Zimmerman","Dependencies")
 
 foreach ($cat in $Categories) {
     $tab = New-Object System.Windows.Controls.TabItem
