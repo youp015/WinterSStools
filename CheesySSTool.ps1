@@ -702,69 +702,6 @@ $catTimer.Add_Tick({
 $catTimer.Start()
 
 
-# ==============================================================================
-# CAT PAW CURSOR
-# ==============================================================================
-Add-Type -AssemblyName System.Drawing
-
-$pawSize = 32
-$bmp = New-Object System.Drawing.Bitmap($pawSize, $pawSize, [System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
-$g = [System.Drawing.Graphics]::FromImage($bmp)
-$g.Clear([System.Drawing.Color]::Transparent)
-$g.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
-
-$pad  = [System.Drawing.SolidBrush]::new([System.Drawing.Color]::FromArgb(255, 245, 194, 0))   # gold
-$dark = [System.Drawing.SolidBrush]::new([System.Drawing.Color]::FromArgb(180, 30, 20, 0))     # dark outline
-
-# Main palm pad
-$g.FillEllipse($dark,  6, 13, 20, 16)
-$g.FillEllipse($pad,   7, 14, 18, 14)
-
-# Toe pads (top row: 3 toes)
-foreach ($tx in @(5, 12, 19)) {
-    $g.FillEllipse($dark, $tx - 1, 5, 9, 9)
-    $g.FillEllipse($pad,  $tx,     6, 7, 7)
-}
-# Extra small outer toes
-$g.FillEllipse($dark, 1, 10, 7, 7)
-$g.FillEllipse($pad,  2, 11, 5, 5)
-$g.FillEllipse($dark, 24, 10, 7, 7)
-$g.FillEllipse($pad,  25, 11, 5, 5)
-
-$g.Dispose()
-
-# Save bitmap as PNG then load as cursor via temp .cur file
-$cursorPath = [System.IO.Path]::Combine($env:TEMP, "cheesy_paw.cur")
-$ms = New-Object System.IO.MemoryStream
-$bmp.Save($ms, [System.Drawing.Imaging.ImageFormat]::Png)
-$bmp.Dispose()
-$pngBytes = $ms.ToArray()
-$ms.Dispose()
-
-# Write a .cur file: ICONDIR header + ICONDIRENTRY + PNG data
-$hotX = 8; $hotY = 8
-$dataOffset = 6 + 16  # ICONDIR(6) + ICONDIRENTRY(16)
-$fileStream = [System.IO.File]::Open($cursorPath, [System.IO.FileMode]::Create)
-$bw = New-Object System.IO.BinaryWriter($fileStream)
-# ICONDIR
-$bw.Write([uint16]0)       # reserved
-$bw.Write([uint16]2)       # type 2 = cursor
-$bw.Write([uint16]1)       # count
-# ICONDIRENTRY
-$bw.Write([byte]$pawSize)  # width
-$bw.Write([byte]$pawSize)  # height
-$bw.Write([byte]0)         # color count
-$bw.Write([byte]0)         # reserved
-$bw.Write([uint16]$hotX)   # hotspot X
-$bw.Write([uint16]$hotY)   # hotspot Y
-$bw.Write([uint32]$pngBytes.Length)
-$bw.Write([uint32]$dataOffset)
-$bw.Write($pngBytes, 0, $pngBytes.Length)
-$bw.Close()
-$fileStream.Close()
-
-$pawCursor = New-Object System.Windows.Input.Cursor($cursorPath)
-$window.Cursor = $pawCursor
 
 # ==============================================================================
 # EVENTS
