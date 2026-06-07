@@ -717,16 +717,17 @@ foreach ($cat in $Categories) {
 
                     $name = $tData.Name
                     $url  = $tData.URL
+                    $cat  = $tData.Category
+                    $type = $tData.Type
 
                     try {
                         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-                        # Parse repo and tag from the URL
-                        # URL format: https://github.com/owner/repo/releases/latest"$installDir\$cat\$name"
+                        $destDir = "$installDir\$cat\$name"
                         if (-not (Test-Path $destDir)) { New-Item -ItemType Directory -Path $destDir -Force | Out-Null }
 
-                        if ($tData.Type -eq "GitHub") {
-                            $urlParts = $tData.URL -replace "https://github.com/", "" -split "/"
+                        if ($type -eq "GitHub") {
+                            $urlParts = $url -replace "https://github.com/", "" -split "/"
                             $owner    = $urlParts[0]
                             $repo     = $urlParts[1]
                             $apiUrl   = "https://api.github.com/repos/$owner/$repo/releases/latest"
@@ -734,10 +735,11 @@ foreach ($cat in $Categories) {
                             $release  = Invoke-RestMethod -Uri $apiUrl -Headers $headers -ErrorAction Stop
                             $asset    = $release.assets | Where-Object { $_.name -match "\.(zip|exe)$" } | Select-Object -First 1
                             if (-not $asset) { throw "No downloadable asset found." }
-                            $url      = $asset.browser_download_url
+                            $dlUrl    = $asset.browser_download_url
                             $fileName = $asset.name
                             $destFile = "$destDir\$fileName"
                         } else {
+                            $dlUrl    = $url
                             $fileName = ($url -split "/")[-1]
                             $destFile = "$destDir\$fileName"
                         }
@@ -747,7 +749,7 @@ foreach ($cat in $Categories) {
                         } else {
                             Write-LogBg "Downloading $fileName..."
                             $wc = New-Object System.Net.WebClient
-                            $wc.DownloadFile($url, $destFile)
+                            $wc.DownloadFile($dlUrl, $destFile)
                             Write-LogBg "Download complete: $fileName"
                         }
 
