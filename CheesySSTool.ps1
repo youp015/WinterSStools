@@ -209,6 +209,9 @@ $ToolData = @(
                         <TextBlock Text="Discord: cheese_cat0" FontSize="10" Foreground="{StaticResource TextMuted}" TextWrapping="Wrap" Margin="4,1,0,0"/>
                         <TextBlock Text="GitHub: cheesecatlol" FontSize="10" Foreground="{StaticResource TextMuted}" TextWrapping="Wrap" Margin="4,1,0,0"/>
 
+                        <TextBlock Text="nic" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextMain}" Margin="4,8,0,4"/>
+                        <TextBlock Text="Discord: mecz.exe" FontSize="10" Foreground="{StaticResource TextMuted}" TextWrapping="Wrap" Margin="4,1,0,0"/>
+
                         <Separator Background="#3D2E00" Margin="0,10,0,10"/>
                         <TextBlock x:Name="InstPathBlock" Text="" FontSize="9" Foreground="#5A4010" TextWrapping="Wrap" Margin="4,0"/>
                     </StackPanel>
@@ -592,7 +595,7 @@ function Start-ButtonAnimation {
 # ==============================================================================
 # POPULATE TABS
 # ==============================================================================
-$Categories = @("Orbdiff","Spokwn","Tonynoh","Praiselily","RedLotus","Others","Zimmerman","Dependencies")
+$Categories = @("Orbdiff","Spokwn","Tonynoh","Praiselily","RedLotus","Zimmerman","Dependencies","Others")
 
 foreach ($cat in $Categories) {
     $tab = New-Object System.Windows.Controls.TabItem
