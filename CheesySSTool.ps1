@@ -501,7 +501,7 @@ function Invoke-WebToolDownload {
 
     if ($url -match "\.(zip|exe|cmd|bat)$") {
         $fileName = ($url -split "/")[-1]
-        $destDir  = "$installDir\Others\$name"
+        $destDir  = "$installDir\$($tool.Category)\$name"
         if (-not (Test-Path $destDir)) { New-Item -ItemType Directory -Path $destDir -Force | Out-Null }
         $destFile = "$destDir\$fileName"
 
@@ -644,15 +644,15 @@ foreach ($cat in $Categories) {
             $tName      = $clickedBtn.Content
             $tData      = $ToolData | Where-Object { $_.Name -eq $tName } | Select-Object -First 1
 
-            # --- Flash: instant gold highlight, restored after tool runs ---
+            # Flash button gold instantly
             $origBg = $clickedBtn.Background
             $origFg = $clickedBtn.Foreground
             $clickedBtn.Background = "#F5C200"
             $clickedBtn.Foreground = "#0F0B00"
-            [System.Windows.Forms.Application]::DoEvents()
+            $clickedBtn.IsEnabled  = $false
 
-            # --- Tool logic ---
             if ($tData.Type -eq "Cmd") {
+                # Cmd tools are instant, run on UI thread
                 Set-Status "Running" "Launching $tName..." "BUSY"
                 Write-Log "Starting: $tName"
                 try {
@@ -663,29 +663,123 @@ foreach ($cat in $Categories) {
                     Write-Log "Error: $_"
                     Set-Status "Error" "Failed to launch $tName." "ERR"
                 }
-            }
-            elseif ($tData.Type -eq "GitHub") {
+                $clickedBtn.Background = $origBg
+                $clickedBtn.Foreground = $origFg
+                $clickedBtn.IsEnabled  = $true
+            } else {
+                # Downloads run in background runspace so UI stays responsive
                 Set-Status "Downloading" "Fetching $tName..." "BUSY"
                 Write-Log "Starting download: $tName"
-                try {
-                    Invoke-ToolDownloadAndRun -tool $tData
-                } catch {
-                    Write-Log "Unexpected error: $_"
-                    Set-Status "Error" "Something went wrong." "ERR"
-                }
+
+                $rs = [runspacefactory]::CreateRunspace()
+                $rs.ApartmentState = "STA"
+                $rs.ThreadOptions  = "ReuseThread"
+                $rs.Open()
+
+                # Pass everything needed into the runspace
+                $rs.SessionStateProxy.SetVariable("tData",      $tData)
+                $rs.SessionStateProxy.SetVariable("installDir", $installDir)
+                $rs.SessionStateProxy.SetVariable("dispatcher", $clickedBtn.Dispatcher)
+                $rs.SessionStateProxy.SetVariable("btn",        $clickedBtn)
+                $rs.SessionStateProxy.SetVariable("origBg",     $origBg)
+                $rs.SessionStateProxy.SetVariable("origFg",     $origFg)
+                $rs.SessionStateProxy.SetVariable("StatusTitle", $StatusTitle)
+                $rs.SessionStateProxy.SetVariable("StatusSub",   $StatusSub)
+                $rs.SessionStateProxy.SetVariable("StatusBadge", $StatusBadge)
+                $rs.SessionStateProxy.SetVariable("LogBox",      $LogBox)
+
+                $ps = [powershell]::Create()
+                $ps.Runspace = $rs
+
+                $null = $ps.AddScript({
+                    function Set-StatusBg {
+                        param($title, $sub, $badge)
+                        $dispatcher.Invoke([Action]{
+                            $StatusTitle.Text = $title
+                            $StatusSub.Text   = $sub
+                            $StatusBadge.Text = $badge
+                        })
+                    }
+                    function Write-LogBg {
+                        param($msg)
+                        $dispatcher.Invoke([Action]{
+                            $LogBox.AppendText("[$(Get-Date -f 'HH:mm:ss')] $msg`n")
+                            $LogBox.ScrollToEnd()
+                        })
+                    }
+                    function Restore-Button {
+                        $dispatcher.Invoke([Action]{
+                            $btn.Background = $origBg
+                            $btn.Foreground = $origFg
+                            $btn.IsEnabled  = $true
+                        })
+                    }
+
+                    $name = $tData.Name
+                    $url  = $tData.URL
+
+                    try {
+                        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+                        if ($tData.Type -eq "GitHub") {
+                            # Resolve latest release asset from GitHub API
+                            $repo     = $tData.Repo
+                            $apiUrl   = "https://api.github.com/repos/$repo/releases/latest"
+                            $headers  = @{ "User-Agent" = "CheesySSTool" }
+                            $release  = Invoke-RestMethod -Uri $apiUrl -Headers $headers
+                            $asset    = $release.assets | Where-Object { $_.name -match "\.(zip|exe)$" } | Select-Object -First 1
+                            if (-not $asset) { throw "No downloadable asset found." }
+                            $url      = $asset.browser_download_url
+                            $fileName = $asset.name
+                            $cat      = $tData.Category
+                            $destDir  = "$installDir\$cat\$name"
+                            if (-not (Test-Path $destDir)) { New-Item -ItemType Directory -Path $destDir -Force | Out-Null }
+                            $destFile = "$destDir\$fileName"
+                        } else {
+                            $fileName = ($url -split "/")[-1]
+                            $cat      = $tData.Category
+                            $destDir  = "$installDir\$cat\$name"
+                            if (-not (Test-Path $destDir)) { New-Item -ItemType Directory -Path $destDir -Force | Out-Null }
+                            $destFile = "$destDir\$fileName"
+                        }
+
+                        if (Test-Path $destFile) {
+                            Write-LogBg "Cached: $fileName - skipping download."
+                        } else {
+                            Write-LogBg "Downloading $fileName..."
+                            $wc = New-Object System.Net.WebClient
+                            $wc.DownloadFile($url, $destFile)
+                            Write-LogBg "Download complete: $fileName"
+                        }
+
+                        if ($fileName -match "\.zip$") {
+                            Write-LogBg "Extracting..."
+                            Expand-Archive -Path $destFile -DestinationPath $destDir -Force -ErrorAction Stop
+                            # Find and launch exe
+                            $exe = Get-ChildItem -Path $destDir -Filter "*.exe" -Recurse | Select-Object -First 1
+                            if ($exe) {
+                                Write-LogBg "Launching $($exe.Name)..."
+                                Start-Process -FilePath $exe.FullName
+                            } else {
+                                $dispatcher.Invoke([Action]{ Start-Process -FilePath explorer.exe -ArgumentList "`"$destDir`"" })
+                            }
+                        } else {
+                            Write-LogBg "Launching $fileName..."
+                            Start-Process -FilePath $destFile
+                        }
+
+                        Set-StatusBg "Ready" "$name launched successfully." "IDLE"
+                    } catch {
+                        Write-LogBg "Error: $_"
+                        Set-StatusBg "Error" "Something went wrong with $name." "ERR"
+                    }
+
+                    Restore-Button
+                    $rs.Close()
+                })
+
+                $null = $ps.BeginInvoke()
             }
-            elseif ($tData.Type -eq "Web") {
-                Set-Status "Downloading" "Fetching $tName..." "BUSY"
-                Write-Log "Starting: $tName"
-                try {
-                    Invoke-WebToolDownload -tool $tData
-                } catch {
-                    Write-Log "Unexpected error: $_"
-                    Set-Status "Error" "Something went wrong." "ERR"
-                }
-            }
-            $clickedBtn.Background = $origBg
-            $clickedBtn.Foreground = $origFg
         })
 
         $wrap.Children.Add($btn) | Out-Null
