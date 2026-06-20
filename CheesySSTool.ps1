@@ -334,16 +334,11 @@ $ToolData = @(
                 <RowDefinition Height="56"/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0">
-                <TextBlock Text="SSTool" FontSize="20" FontWeight="Bold" Foreground="#F5C200" Margin="0,0,0,12"/>
-                <TextBlock TextWrapping="Wrap" Foreground="#FFF4C8" FontSize="13" Margin="0,0,0,12"
-                           Text="This tool is designed to make it easier to use the utilities commonly needed during a screenshare."/>
+                <TextBlock Text="CheesySSTool" FontSize="20" FontWeight="Bold" Foreground="#F5C200" Margin="0,0,0,12"/>
                 <TextBlock TextWrapping="Wrap" Foreground="#3DD9C7" FontSize="13" Margin="0,0,0,12"
                            Text="All programs are downloaded automatically from their official GitHub repositories and saved in a neatly organized folder. None of your information is ever collected or modified."/>
-                <TextBlock TextWrapping="Wrap" Foreground="#FFF4C8" FontSize="13" Margin="0,0,0,12"
+                <TextBlock TextWrapping="Wrap" Foreground="#FFF4C8" FontSize="13" Margin="0,0,0,16"
                            Text="Each tool is developed and maintained by its own author. I take no responsibility for anything that may be found regarding these tools in the future."/>
-                <TextBlock TextWrapping="Wrap" Foreground="#F5C200" FontSize="13" Margin="0,0,0,4"
-                           Text="CheesySSTool itself is developed by cheese cat. If you like the project, feel free to follow me on GitHub:"/>
-                <TextBlock Text="github.com/cheesecatlol" Foreground="#F5C200" FontSize="13" Margin="0,0,0,16"/>
                 <TextBlock TextWrapping="Wrap" Foreground="#FF6B6B" FontSize="13" FontWeight="SemiBold"
                            Text="To continue, you must agree with everything stated above."/>
             </StackPanel>
