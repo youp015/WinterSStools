@@ -462,12 +462,10 @@ function Start-CmdToolCommand {
     $tempScript = [System.IO.Path]::Combine($env:TEMP, "cheesy_$([guid]::NewGuid().ToString('N')).ps1")
     Set-Content -LiteralPath $tempScript -Value $Command -Encoding UTF8 -Force
 
-    Start-Process -FilePath "powershell.exe" -ArgumentList @(
-        "-NoExit",
-        "-NoProfile",
-        "-ExecutionPolicy", "Bypass",
-        "-File", "`"$tempScript`""
-    ) -WindowStyle Normal
+    # cmd /c start opens a new, separate, persistent console window.
+    # This is the most reliable pattern on Windows for this purpose.
+    $startArgs = '/c start "CheesySSTool" powershell.exe -NoExit -NoProfile -ExecutionPolicy Bypass -File "' + $tempScript + '"'
+    Start-Process -FilePath "cmd.exe" -ArgumentList $startArgs -WindowStyle Hidden
 }
 
 function Save-UrlToFile {
