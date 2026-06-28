@@ -460,7 +460,8 @@ function Start-CmdToolCommand {
     param([Parameter(Mandatory=$true)][string]$Command)
 
     $encodedCommand = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($Command))
-    Start-Process -FilePath "cmd.exe" -ArgumentList "/k", "powershell.exe -NoProfile -ExecutionPolicy Bypass -EncodedCommand $encodedCommand" -WindowStyle Normal
+    $fullArg = "/k powershell.exe -NoProfile -ExecutionPolicy Bypass -EncodedCommand $encodedCommand"
+    Start-Process -FilePath "cmd.exe" -ArgumentList $fullArg -WindowStyle Normal
 }
 
 function Save-UrlToFile {
