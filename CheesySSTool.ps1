@@ -916,8 +916,11 @@ foreach ($cat in $Categories) {
                         }
                         try {
                             $cmd = $timerData.Command
-                            if ($cmd -match '^http') { Start-Process $cmd }
-                            else { Start-Process "cmd.exe" -ArgumentList "/c $cmd" }
+                            if ($cmd -match '^http') {
+                                Start-Process "powershell.exe" -ArgumentList @("-NoExit","-NoProfile","-ExecutionPolicy","Bypass","-Command",$cmd)
+                            } else {
+                                Start-Process "powershell.exe" -ArgumentList @("-NoExit","-NoProfile","-ExecutionPolicy","Bypass","-Command",$cmd)
+                            }
                             Write-LogBg "Launched: $timerName"
                             Set-StatusBg "Ready" "$timerName launched." "IDLE"
                         } catch {
