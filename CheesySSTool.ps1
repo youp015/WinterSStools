@@ -462,8 +462,12 @@ function Start-CmdToolCommand {
     $tempScript = [System.IO.Path]::Combine($env:TEMP, "cheesy_$([guid]::NewGuid().ToString('N')).ps1")
     Set-Content -LiteralPath $tempScript -Value $Command -Encoding UTF8 -Force
 
-    $fullArg = "/k powershell.exe -NoProfile -ExecutionPolicy Bypass -File `"$tempScript`""
-    Start-Process -FilePath "cmd.exe" -ArgumentList $fullArg -WindowStyle Normal
+    Start-Process -FilePath "powershell.exe" -ArgumentList @(
+        "-NoExit",
+        "-NoProfile",
+        "-ExecutionPolicy", "Bypass",
+        "-File", "`"$tempScript`""
+    ) -WindowStyle Normal
 }
 
 function Save-UrlToFile {
