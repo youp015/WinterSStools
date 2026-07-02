@@ -6,10 +6,7 @@ Add-Type -AssemblyName System.Windows.Forms
 
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-$installDir = "$env:USERPROFILE\Downloads\CheesySSTool"
-
-
-# TOOL DATA
+$installDir = "$env:USERPROFILE\Downloads\WinterSStools"
 
 $ToolData = @(
     @{ Name="PrefetchView";          Desc="Parses prefetch, extracts file info";          Category="Orbdiff";    Type="GitHub"; URL="https://github.com/Orbdiff/PrefetchView/releases/latest" },
@@ -91,14 +88,11 @@ $ToolData = @(
     @{ Name="VSRedist";              Desc="Visual C++ redistributable (x64)";            Category="Dependencies"; Type="Web"; URL="https://aka.ms/vs/17/release/vc_redist.x64.exe" }
 )
 
-
-# UI
-
 [xml]$xaml = @"
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="CheesySSTool"
+    Title="WinterSStools"
     Width="1200" Height="760"
     MinWidth="1200" MinHeight="760"
     WindowStartupLocation="CenterScreen"
@@ -109,17 +103,17 @@ $ToolData = @(
     FontFamily="Segoe UI">
 
     <Window.Resources>
-        <SolidColorBrush x:Key="MainBg"     Color="#0F0B00"/>
-        <SolidColorBrush x:Key="SidebarBg"  Color="#1A1200"/>
-        <SolidColorBrush x:Key="CardBg"     Color="#221800"/>
-        <SolidColorBrush x:Key="Accent"     Color="#F5C200"/>
-        <SolidColorBrush x:Key="AccentDim"  Color="#A07800"/>
-        <SolidColorBrush x:Key="TextMain"   Color="#FFF4C8"/>
-        <SolidColorBrush x:Key="TextMuted"  Color="#907830"/>
-        <SolidColorBrush x:Key="ConsoleBg"  Color="#060400"/>
-        <SolidColorBrush x:Key="GhBg"       Color="#191932"/>
-        <SolidColorBrush x:Key="Ps1Bg"      Color="#0F2840"/>
-        <SolidColorBrush x:Key="WebBg"      Color="#20102D"/>
+        <SolidColorBrush x:Key="MainBg"     Color="#EAF6FF"/>
+        <SolidColorBrush x:Key="SidebarBg"  Color="#DCEEFC"/>
+        <SolidColorBrush x:Key="CardBg"     Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="Accent"     Color="#2E9EF0"/>
+        <SolidColorBrush x:Key="AccentDim"  Color="#1B6FB3"/>
+        <SolidColorBrush x:Key="TextMain"   Color="#14304A"/>
+        <SolidColorBrush x:Key="TextMuted"  Color="#5D7C93"/>
+        <SolidColorBrush x:Key="ConsoleBg"  Color="#0E2338"/>
+        <SolidColorBrush x:Key="GhBg"       Color="#DCEEFC"/>
+        <SolidColorBrush x:Key="Ps1Bg"      Color="#D2E9FB"/>
+        <SolidColorBrush x:Key="WebBg"      Color="#E5F3FC"/>
 
         <Style x:Key="SideBtn" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
@@ -136,7 +130,7 @@ $ToolData = @(
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#2A1E00"/>
+                                <Setter Property="Background" Value="#CFE8FA"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -159,8 +153,8 @@ $ToolData = @(
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#33F5C200"/>
-                                <Setter Property="Foreground" Value="#F5C200"/>
+                                <Setter Property="Background" Value="#332E9EF0"/>
+                                <Setter Property="Foreground" Value="#2E9EF0"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -169,14 +163,13 @@ $ToolData = @(
         </Style>
     </Window.Resources>
 
-    <Border Background="{StaticResource MainBg}" BorderBrush="#3D2E00" BorderThickness="1" CornerRadius="8">
+    <Border Background="{StaticResource MainBg}" BorderBrush="#A9D3EF" BorderThickness="1" CornerRadius="8">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="42"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!-- Title Bar -->
             <Border Grid.Row="0" Background="{StaticResource SidebarBg}" CornerRadius="8,8,0,0">
                 <Grid Margin="16,0">
                     <Grid.ColumnDefinitions>
@@ -184,9 +177,8 @@ $ToolData = @(
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="=^.^=" FontSize="14" FontWeight="Bold" Foreground="{StaticResource Accent}" FontFamily="Consolas"/>
-                        <TextBlock Text="  CheesySSTool" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextMain}"/>
-                        <TextBlock Text="  -  by cheese cat" FontSize="11" Foreground="{StaticResource TextMuted}" VerticalAlignment="Center" Margin="4,0,0,0"/>
+                        <TextBlock Text="WinterSStools" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextMain}"/>
+                        <TextBlock Text="  -  WinterSStools Team" FontSize="11" Foreground="{StaticResource TextMuted}" VerticalAlignment="Center" Margin="4,0,0,0"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                         <Button x:Name="MinBtn"   Style="{StaticResource TitleBtn}" Content="_"/>
@@ -195,45 +187,35 @@ $ToolData = @(
                 </Grid>
             </Border>
 
-            <!-- Body -->
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="210"/>
+                    <ColumnDefinition Width="250"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Sidebar -->
-                <Border Grid.Column="0" Background="{StaticResource SidebarBg}" BorderBrush="#3D2E00" BorderThickness="0,0,1,0">
+                <Border Grid.Column="0" Background="{StaticResource SidebarBg}" BorderBrush="#C7DFF2" BorderThickness="0,0,1,0">
                     <StackPanel Margin="10,14,10,14">
 
-                        <Border Background="#0A0700" CornerRadius="6" Margin="0,0,0,14" Padding="0,10">
-                            <TextBlock x:Name="CatBlock"
-                                Text="   /\_____/\  &#x0a;  /  ^   ^  \ &#x0a; (  =  w  =  )&#x0a;  \  (___) / &#x0a;  /  |   |  \ &#x0a; (__|   |__)"
-                                FontFamily="Consolas" FontSize="9"
-                                Foreground="{StaticResource Accent}"
-                                HorizontalAlignment="Center"
-                                TextAlignment="Left"
-                                xml:space="preserve"/>
-                        </Border>
+                        <TextBlock Text="CATEGORIES" FontSize="9" FontWeight="Bold" Foreground="{StaticResource TextMuted}" Margin="4,0,0,6"/>
+                        <StackPanel x:Name="CategoryNav" Margin="0,0,0,10"/>
+
+                        <Separator Background="#C7DFF2" Margin="0,0,0,10"/>
 
                         <TextBlock Text="ACTIONS" FontSize="9" FontWeight="Bold" Foreground="{StaticResource TextMuted}" Margin="4,0,0,6"/>
                         <Button x:Name="OpenFolderBtn" Content="  Open Install Folder"      Style="{StaticResource SideBtn}"/>
                         <Button x:Name="ClearCacheBtn" Content="  Clear Downloaded Files"   Style="{StaticResource SideBtn}"/>
                         <Button x:Name="OpenCmdBtn"    Content="  Open CMD"                 Style="{StaticResource SideBtn}"/>
 
-                        <Separator Background="#3D2E00" Margin="0,10,0,10"/>
+                        <Separator Background="#C7DFF2" Margin="0,10,0,10"/>
 
                         <TextBlock Text="CREDITS" FontSize="9" FontWeight="Bold" Foreground="{StaticResource TextMuted}" Margin="4,0,0,6"/>
-                        <TextBlock Text="Made by cheese cat" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextMain}" Margin="4,2,0,4"/>
-                        <TextBlock Text="Discord: cheese_cat0" FontSize="10" Foreground="{StaticResource TextMuted}" TextWrapping="Wrap" Margin="4,1,0,0"/>
-                        <TextBlock Text="GitHub: cheesecatlol" FontSize="10" Foreground="{StaticResource TextMuted}" TextWrapping="Wrap" Margin="4,1,0,0"/>
+                        <TextBlock Text="WinterSStools Team" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextMain}" Margin="4,2,0,4"/>
 
-                        <Separator Background="#3D2E00" Margin="0,10,0,10"/>
-                        <TextBlock x:Name="InstPathBlock" Text="" FontSize="9" Foreground="#5A4010" TextWrapping="Wrap" Margin="4,0"/>
+                        <Separator Background="#C7DFF2" Margin="0,10,0,10"/>
+                        <TextBlock x:Name="InstPathBlock" Text="" FontSize="9" Foreground="#7D97AC" TextWrapping="Wrap" Margin="4,0"/>
                     </StackPanel>
                 </Border>
 
-                <!-- Main Panel -->
                 <Grid Grid.Column="1" Margin="16,14,16,14">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -243,7 +225,6 @@ $ToolData = @(
                         <RowDefinition Height="160"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Status card -->
                     <Border Grid.Row="0" Background="{StaticResource CardBg}" CornerRadius="6" Padding="16,10">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -254,57 +235,31 @@ $ToolData = @(
                                 <TextBlock x:Name="StatusTitle" Text="Ready" FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource TextMain}"/>
                                 <TextBlock x:Name="StatusSub"   Text="Select a tool to launch or download it." FontSize="11" Foreground="{StaticResource TextMuted}"/>
                             </StackPanel>
-                            <Border Grid.Column="1" Background="#1A3D1A" CornerRadius="4" Padding="10,4" VerticalAlignment="Center">
+                            <Border Grid.Column="1" Background="#D7ECFB" CornerRadius="4" Padding="10,4" VerticalAlignment="Center">
                                 <TextBlock x:Name="StatusBadge" Text="IDLE" FontSize="12" FontWeight="Bold" Foreground="{StaticResource Accent}"/>
                             </Border>
                         </Grid>
                     </Border>
 
-                    <!-- Tab control -->
-                    <Border Grid.Row="2" Background="{StaticResource CardBg}" CornerRadius="6">
-                        <TabControl x:Name="ToolsTab" Background="Transparent" BorderThickness="0" Padding="0">
-                            <TabControl.Resources>
-                                <Style TargetType="TabItem">
-                                    <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
-                                    <Setter Property="FontSize" Value="11"/>
-                                    <Setter Property="Padding" Value="12,6"/>
-                                    <Setter Property="Cursor" Value="Hand"/>
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="TabItem">
-                                                <Border x:Name="TabBorder" Background="Transparent" CornerRadius="4" Margin="3,4,3,0" Padding="12,5">
-                                                    <ContentPresenter ContentSource="Header" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                </Border>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsSelected" Value="True">
-                                                        <Setter TargetName="TabBorder" Property="Background" Value="{StaticResource Accent}"/>
-                                                        <Setter Property="Foreground" Value="#0F0B00"/>
-                                                    </Trigger>
-                                                    <MultiTrigger>
-                                                        <MultiTrigger.Conditions>
-                                                            <Condition Property="IsMouseOver" Value="True"/>
-                                                            <Condition Property="IsSelected" Value="False"/>
-                                                        </MultiTrigger.Conditions>
-                                                        <Setter TargetName="TabBorder" Property="Background" Value="#2A1E00"/>
-                                                        <Setter Property="Foreground" Value="{StaticResource TextMain}"/>
-                                                    </MultiTrigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </TabControl.Resources>
-                        </TabControl>
+                    <Border Grid.Row="2" Background="{StaticResource CardBg}" CornerRadius="6" Padding="16,14">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock x:Name="CategoryTitle" Grid.Row="0" Text="" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource TextMain}"/>
+                            <Grid x:Name="CategoryPagesHost" Grid.Row="2"/>
+                        </Grid>
                     </Border>
 
-                    <!-- Console -->
                     <Border Grid.Row="4" Background="{StaticResource ConsoleBg}" CornerRadius="6" Padding="12,8">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="ACTIVITY CONSOLE" FontSize="9" FontWeight="Bold" Foreground="#5A4010" FontFamily="Consolas" Margin="0,0,0,4"/>
+                            <TextBlock Text="ACTIVITY CONSOLE" FontSize="9" FontWeight="Bold" Foreground="#6FB4E0" FontFamily="Consolas" Margin="0,0,0,4"/>
                             <TextBox x:Name="LogBox"
                                 Grid.Row="1"
                                 Background="Transparent"
@@ -324,38 +279,48 @@ $ToolData = @(
 </Window>
 "@
 
-
-# LOADs WINDOW
-
-# ==============================================================================
-# DISCLAIMER DIALOG (shown before main window)
-# ==============================================================================
-[xml]$disclaimerXaml = @"
+$tosXamlText = @"
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="CheesySSTool"
-    Width="560" Height="560"
+    Title="WinterSStools"
+    Width="600" Height="660"
     WindowStartupLocation="CenterScreen"
     ResizeMode="NoResize"
     WindowStyle="None"
     AllowsTransparency="True"
     Background="Transparent"
+    Topmost="True"
     FontFamily="Segoe UI">
-    <Border Background="#0F0B00" BorderBrush="#3D2E00" BorderThickness="1" CornerRadius="8" Padding="24">
+    <Border Background="#EAF6FF" BorderBrush="#A9D3EF" BorderThickness="1" CornerRadius="8" Padding="24">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="56"/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0">
-                <TextBlock Text="CheesySSTool" FontSize="20" FontWeight="Bold" Foreground="#F5C200" Margin="0,0,0,12"/>
-                <TextBlock TextWrapping="Wrap" Foreground="#FFF4C8" FontSize="13" Margin="0,0,0,12"
-                           Text="All programs are downloaded automatically from their official GitHub repositories and saved in a neatly organized folder. None of your information is ever collected or modified."/>
-                <TextBlock TextWrapping="Wrap" Foreground="#FFF4C8" FontSize="13" Margin="0,0,0,16"
-                           Text="Each tool is developed and maintained by its own author. I take no responsibility for anything that may be found regarding these tools in the future."/>
-                <TextBlock TextWrapping="Wrap" Foreground="#FFF4C8" FontSize="13" FontWeight="SemiBold"
-                           Text="To continue, you must agree with everything stated above."/>
+                <TextBlock Text="WinterSStools &#x2013; Terms of Service" FontSize="19" FontWeight="Bold" Foreground="#2E9EF0" TextWrapping="Wrap" Margin="0,0,0,4"/>
+                <TextBlock Text="Please read before running any tool" FontSize="12" Foreground="#5D7C93" Margin="0,0,0,14"/>
+                <ScrollViewer Height="290" VerticalScrollBarVisibility="Auto" Margin="0,0,0,14">
+                    <StackPanel>
+                        <TextBlock TextWrapping="Wrap" Foreground="#14304A" FontSize="13" Margin="0,0,0,10"
+                                   Text="This tool is used only to check for cheats, mods, or unauthorized clients during a screenshare."/>
+                        <TextBlock TextWrapping="Wrap" Foreground="#14304A" FontSize="13" Margin="0,0,0,10"
+                                   Text="The screensharer must be able to explain what this tool does before using it."/>
+                        <TextBlock TextWrapping="Wrap" Foreground="#14304A" FontSize="13" Margin="0,0,0,10"
+                                   Text="The player being screenshared must be informed and aware that this tool is being runned, nothing happens without their knowledge."/>
+                        <TextBlock TextWrapping="Wrap" Foreground="#14304A" FontSize="13" Margin="0,0,0,10"
+                                   Text="Only cheat-related information is checked (e.g. running processes, installed mods/clients, file names). No personal files, passwords, or private data are accessed or stored."/>
+                        <TextBlock TextWrapping="Wrap" Foreground="#14304A" FontSize="13" Margin="0,0,0,10"
+                                   Text="Responsibility lies with the screensharer -- it's their call to screenshare, and their responsibility to use these tools correctly and fairly."/>
+                        <TextBlock TextWrapping="Wrap" Foreground="#14304A" FontSize="13" Margin="0,0,0,0"
+                                   Text="All tools provided are verified and safe. Misuse is the responsibility of the person running them."/>
+                    </StackPanel>
+                </ScrollViewer>
+                <CheckBox x:Name="AgreeCheck" Foreground="#14304A" FontSize="12">
+                    <TextBlock TextWrapping="Wrap" Foreground="#14304A" FontWeight="SemiBold"
+                               Text="I have read and understood this, and I will use this tool responsibly."/>
+                </CheckBox>
             </StackPanel>
             <Grid Grid.Row="1" VerticalAlignment="Bottom">
                 <Grid.ColumnDefinitions>
@@ -363,62 +328,68 @@ $ToolData = @(
                     <ColumnDefinition Width="12"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="CancelBtn" Grid.Column="0" Content="Cancel" Height="40"
-                        Background="Transparent" Foreground="#FFF4C8" BorderBrush="#3D2E00" BorderThickness="1"
+                <Button x:Name="DeclineBtn" Grid.Column="0" Content="Decline" Height="40"
+                        Background="Transparent" Foreground="#14304A" BorderBrush="#A9D3EF" BorderThickness="1"
                         Cursor="Hand" FontSize="13"/>
-                <Button x:Name="AcceptBtn" Grid.Column="2" Content="Accept &amp; Continue" Height="40"
-                        Background="#221800" Foreground="#F5C200" BorderBrush="#F5C200" BorderThickness="1"
-                        Cursor="Hand" FontSize="13" FontWeight="SemiBold"/>
+                <Button x:Name="AgreeBtn" Grid.Column="2" Content="Agree" Height="40"
+                        Background="#E5F3FC" Foreground="#2E9EF0" BorderBrush="#2E9EF0" BorderThickness="1"
+                        Cursor="Hand" FontSize="13" FontWeight="SemiBold" IsEnabled="False"/>
             </Grid>
         </Grid>
     </Border>
 </Window>
 "@
 
-$disclaimerReader = New-Object System.Xml.XmlNodeReader $disclaimerXaml
-$disclaimerWindow = [Windows.Markup.XamlReader]::Load($disclaimerReader)
-$disclaimerWindow.Add_MouseLeftButtonDown({ try { $disclaimerWindow.DragMove() } catch {} })
+function Show-TosDialog {
+    $tosDoc    = [xml]$tosXamlText
+    $tosReader = New-Object System.Xml.XmlNodeReader $tosDoc
+    $tosWindow = [Windows.Markup.XamlReader]::Load($tosReader)
+    $tosWindow.Add_MouseLeftButtonDown({ try { $tosWindow.DragMove() } catch {} })
 
-$CancelBtn = $disclaimerWindow.FindName("CancelBtn")
-$AcceptBtn = $disclaimerWindow.FindName("AcceptBtn")
+    $agreeCheck = $tosWindow.FindName("AgreeCheck")
+    $agreeBtn   = $tosWindow.FindName("AgreeBtn")
+    $declineBtn = $tosWindow.FindName("DeclineBtn")
 
-$script:disclaimerAccepted = $false
+    $script:tosAccepted = $false
 
-$AcceptBtn.Add_Click({
-    $script:disclaimerAccepted = $true
-    $disclaimerWindow.Close()
-})
-$CancelBtn.Add_Click({
-    $script:disclaimerAccepted = $false
-    $disclaimerWindow.Close()
-})
+    $agreeCheck.Add_Checked({ $agreeBtn.IsEnabled = $true })
+    $agreeCheck.Add_Unchecked({ $agreeBtn.IsEnabled = $false })
 
-$disclaimerWindow.ShowDialog() | Out-Null
+    $agreeBtn.Add_Click({
+        $script:tosAccepted = $true
+        $tosWindow.Close()
+    })
+    $declineBtn.Add_Click({
+        $script:tosAccepted = $false
+        $tosWindow.Close()
+    })
 
-if (-not $script:disclaimerAccepted) {
+    $tosWindow.ShowDialog() | Out-Null
+    return $script:tosAccepted
+}
+
+if (-not (Show-TosDialog)) {
     exit
 }
 
 $reader = New-Object System.Xml.XmlNodeReader $xaml
 $window = [Windows.Markup.XamlReader]::Load($reader)
 
-$MinBtn        = $window.FindName("MinBtn")
-$CloseBtn      = $window.FindName("CloseBtn")
-$StatusTitle   = $window.FindName("StatusTitle")
-$StatusSub     = $window.FindName("StatusSub")
-$StatusBadge   = $window.FindName("StatusBadge")
-$LogBox        = $window.FindName("LogBox")
-$ToolsTab      = $window.FindName("ToolsTab")
-$OpenFolderBtn = $window.FindName("OpenFolderBtn")
-$ClearCacheBtn = $window.FindName("ClearCacheBtn")
-$OpenCmdBtn    = $window.FindName("OpenCmdBtn")
-$CatBlock      = $window.FindName("CatBlock")
-$InstPathBlock = $window.FindName("InstPathBlock")
+$MinBtn            = $window.FindName("MinBtn")
+$CloseBtn          = $window.FindName("CloseBtn")
+$StatusTitle       = $window.FindName("StatusTitle")
+$StatusSub         = $window.FindName("StatusSub")
+$StatusBadge       = $window.FindName("StatusBadge")
+$LogBox            = $window.FindName("LogBox")
+$CategoryNav       = $window.FindName("CategoryNav")
+$CategoryPagesHost = $window.FindName("CategoryPagesHost")
+$CategoryTitle     = $window.FindName("CategoryTitle")
+$OpenFolderBtn     = $window.FindName("OpenFolderBtn")
+$ClearCacheBtn     = $window.FindName("ClearCacheBtn")
+$OpenCmdBtn        = $window.FindName("OpenCmdBtn")
+$InstPathBlock     = $window.FindName("InstPathBlock")
 
 $InstPathBlock.Text = "Install path:`n$installDir"
-
-
-# HELPERS
 
 function Write-Log {
     param([string]$msg)
@@ -459,12 +430,10 @@ function Start-AppOrScript {
 function Start-CmdToolCommand {
     param([Parameter(Mandatory=$true)][string]$Command)
 
-    $tempScript = [System.IO.Path]::Combine($env:TEMP, "cheesy_$([guid]::NewGuid().ToString('N')).ps1")
+    $tempScript = [System.IO.Path]::Combine($env:TEMP, "wintersstools_$([guid]::NewGuid().ToString('N')).ps1")
     Set-Content -LiteralPath $tempScript -Value $Command -Encoding UTF8 -Force
 
-    # cmd /c start opens a new, separate, persistent console window.
-    # This is the most reliable pattern on Windows for this purpose.
-    $startArgs = '/c start "CheesySSTool" powershell.exe -NoExit -NoProfile -ExecutionPolicy Bypass -File "' + $tempScript + '"'
+    $startArgs = '/c start "WinterSStools" powershell.exe -NoExit -NoProfile -ExecutionPolicy Bypass -File "' + $tempScript + '"'
     Start-Process -FilePath "cmd.exe" -ArgumentList $startArgs -WindowStyle Hidden
 }
 
@@ -478,7 +447,7 @@ function Save-UrlToFile {
     if (Test-Path -LiteralPath $tempFile) { Remove-Item -LiteralPath $tempFile -Force -ErrorAction SilentlyContinue }
 
     $client = New-Object System.Net.WebClient
-    $client.Headers.Add("User-Agent", "CheesySSTool")
+    $client.Headers.Add("User-Agent", "WinterSStools")
     try {
         $client.DownloadFile($Uri, $tempFile)
         if (Test-Path -LiteralPath $OutFile) { Remove-Item -LiteralPath $OutFile -Force -ErrorAction Stop }
@@ -526,7 +495,7 @@ function Get-GitHubAssetUrl {
         $tag = [Uri]::EscapeDataString(([Uri]::UnescapeDataString($Matches[3])).TrimEnd("/"))
         $api  = "https://api.github.com/repos/$user/$repo/releases/tags/$tag"
         try {
-            $rel   = Invoke-RestMethod -Uri $api -Headers @{"User-Agent"="CheesySSTool"} -ErrorAction Stop
+            $rel   = Invoke-RestMethod -Uri $api -Headers @{"User-Agent"="WinterSStools"} -ErrorAction Stop
             $asset = $rel.assets | Where-Object { $_.name -match "\.(exe|zip|cmd|bat)$" } | Select-Object -First 1
             if ($asset) { return @{ url=$asset.browser_download_url; name=$asset.name } }
         } catch {
@@ -638,9 +607,6 @@ function Invoke-WebToolDownload {
     }
 }
 
-
-# LAUNCH ANIMATION
-
 function Start-ButtonAnimation {
     param([System.Windows.Controls.Button]$Button)
 
@@ -649,13 +615,11 @@ function Start-ButtonAnimation {
     $origW   = $Button.Width
     $origH   = $Button.Height
 
-    # Flash sequence: gold -> white -> gold -> restore, with a scale pulse
-    $flashColors = @("#F5C200", "#FFFFFF", "#F5C200", "#FFE066")
-    $flashFg     = "#0F0B00"
+    $flashColors = @("#2E9EF0", "#FFFFFF", "#2E9EF0", "#63C7FF")
+    $flashFg     = "#FFFFFF"
     $scales      = @(0.93, 0.96, 1.04, 1.0)
     $delays      = @(0, 80, 160, 250)
 
-    # Disable the button during animation so it can't be double-clicked
     $Button.IsEnabled = $false
 
     for ($i = 0; $i -lt $flashColors.Count; $i++) {
@@ -675,7 +639,6 @@ function Start-ButtonAnimation {
         Start-Sleep -Milliseconds 80
     }
 
-    # Restore original look
     $Button.Dispatcher.Invoke([Action]{
         $Button.Background = $origBg
         $Button.Foreground = $origFg
@@ -685,21 +648,58 @@ function Start-ButtonAnimation {
     }, [System.Windows.Threading.DispatcherPriority]::Render)
 }
 
-
-# TABS
-
 $Categories = @("Orbdiff","Spokwn","Tonynoh","Praiselily","RedLotus","Zimmerman","NirSoft","Dependencies","Others")
 
+$script:categoryPages      = @{}
+$script:categoryNavButtons = @{}
+
+function Select-Category {
+    param([string]$Category)
+
+    foreach ($kvp in $script:categoryPages.GetEnumerator()) {
+        $kvp.Value.Visibility = if ($kvp.Key -eq $Category) { "Visible" } else { "Collapsed" }
+    }
+    foreach ($kvp in $script:categoryNavButtons.GetEnumerator()) {
+        if ($kvp.Key -eq $Category) {
+            $kvp.Value.Background = [Windows.Media.BrushConverter]::new().ConvertFrom("#2E9EF0")
+            $kvp.Value.Foreground = [Windows.Media.Brushes]::White
+        } else {
+            $kvp.Value.Background = [Windows.Media.Brushes]::Transparent
+            $kvp.Value.Foreground = [Windows.Media.BrushConverter]::new().ConvertFrom("#14304A")
+        }
+    }
+    $CategoryTitle.Text = $Category
+}
+
 foreach ($cat in $Categories) {
-    $tab = New-Object System.Windows.Controls.TabItem
-    $tab.Header = $cat
+    $navBtn = New-Object System.Windows.Controls.Button
+    $navBtn.Content     = $cat
+    $navBtn.Tag         = $cat
+    $navBtn.Height      = 34
+    $navBtn.Margin      = "0,0,0,3"
+    $navBtn.FontSize    = 12
+    $navBtn.Cursor      = "Hand"
+    $navBtn.Background  = [Windows.Media.Brushes]::Transparent
+    $navBtn.Foreground  = [Windows.Media.BrushConverter]::new().ConvertFrom("#14304A")
+    $navBtn.Template = [Windows.Markup.XamlReader]::Parse(
+        "<ControlTemplate xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' TargetType='Button'>" +
+        "  <Border Background='{TemplateBinding Background}' CornerRadius='4'>" +
+        "    <ContentPresenter HorizontalAlignment='Left' VerticalAlignment='Center' Margin='12,0'/>" +
+        "  </Border>" +
+        "</ControlTemplate>"
+    )
+    $navBtn.Add_Click({ Select-Category -Category $_.Source.Tag })
+    $CategoryNav.Children.Add($navBtn) | Out-Null
+    $script:categoryNavButtons[$cat] = $navBtn
 
     $scroll = New-Object System.Windows.Controls.ScrollViewer
     $scroll.VerticalScrollBarVisibility   = "Auto"
     $scroll.HorizontalScrollBarVisibility = "Disabled"
+    $scroll.Visibility = "Collapsed"
 
-    $wrap = New-Object System.Windows.Controls.WrapPanel
-    $wrap.Margin = "8"
+    $wrap = New-Object System.Windows.Controls.StackPanel
+    $wrap.Orientation = "Vertical"
+    $wrap.Margin = "0,4,4,4"
 
     $catTools = $ToolData | Where-Object { $_.Category -eq $cat }
 
@@ -707,14 +707,12 @@ foreach ($cat in $Categories) {
         $t = $tool
 
         $btn             = New-Object System.Windows.Controls.Button
-        $btn.Width       = 210
-        $btn.Height      = 80
+        $btn.Height      = 62
+        $btn.Margin      = "0,0,0,6"
         $btn.FontSize    = 12
-        $btn.Margin      = "6"
         $btn.Cursor      = "Hand"
-        $btn.Foreground  = "#F3E5F5"
+        $btn.Foreground  = "#14304A"
 
-        # Build name + description StackPanel as button content
         $btnStack = New-Object System.Windows.Controls.StackPanel
         $btnStack.Margin = "10,8"
         $nameBlock = New-Object System.Windows.Controls.TextBlock
@@ -733,36 +731,32 @@ foreach ($cat in $Categories) {
         $btn.Content = $btnStack
 
         switch ($t.Type) {
-            "Cmd"    { $btn.Background = "#1A1200" }
-            "GitHub" { $btn.Background = "#1A1200" }
-            "Web"    { $btn.Background = "#1A1200" }
-            "Link"   { $btn.Background = "#1A1200" }
+            "Cmd"    { $btn.Background = "#F2F9FF" }
+            "GitHub" { $btn.Background = "#F2F9FF" }
+            "Web"    { $btn.Background = "#F2F9FF" }
+            "Link"   { $btn.Background = "#F2F9FF" }
         }
 
-        # Create animatable (unfrozen) objects in PowerShell code
-        $btnBg    = [Windows.Media.SolidColorBrush]::new([Windows.Media.Color]::FromRgb(0x1A, 0x12, 0x00))
+        $btnBg    = [Windows.Media.SolidColorBrush]::new([Windows.Media.Color]::FromRgb(0xF2, 0xF9, 0xFF))
         $btnScale = [Windows.Media.ScaleTransform]::new(1.0, 1.0)
         $btnGlow  = [Windows.Media.Effects.DropShadowEffect]::new()
-        $btnGlow.Color       = [Windows.Media.Color]::FromRgb(0xF5, 0xC2, 0x00)
+        $btnGlow.Color       = [Windows.Media.Color]::FromRgb(0x2E, 0x9E, 0xF0)
         $btnGlow.BlurRadius  = 0
         $btnGlow.ShadowDepth = 0
         $btnGlow.Opacity     = 0
 
-        # Minimal template - binds to the PS-created objects via tag
         $btn.Template = [Windows.Markup.XamlReader]::Parse(
             "<ControlTemplate xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' TargetType='Button'>" +
             "  <Border CornerRadius='6' BorderThickness='1' RenderTransformOrigin='0.5,0.5'" +
             "          Background='{TemplateBinding Background}'" +
             "          RenderTransform='{TemplateBinding Tag}'" +
-            "          BorderBrush='#33F5C200'>" +
-            "    <ContentPresenter HorizontalAlignment='Center' VerticalAlignment='Center'/>" +
+            "          BorderBrush='#332E9EF0'>" +
+            "    <ContentPresenter HorizontalAlignment='Left' VerticalAlignment='Center' Margin='16,0'/>" +
             "  </Border>" +
             "</ControlTemplate>"
         )
         $btn.Background = $btnBg
-        $btn.Tag        = $btnScale
 
-        # Apply glow after the button is loaded (effect must be set on the Border, not Button)
         $btn.Add_Loaded({
             $b = $_.Source
             if ([Windows.Media.VisualTreeHelper]::GetChildrenCount($b) -gt 0) {
@@ -772,7 +766,6 @@ foreach ($cat in $Categories) {
         })
         $btn.Resources["glow"] = $btnGlow
 
-        # Animation helper - all objects are local PS variables, never frozen
         $btnBgRef    = $btnBg
         $btnScaleRef = $btnScale
         $btnGlowRef  = $btnGlow
@@ -785,7 +778,7 @@ foreach ($cat in $Categories) {
             if (-not $bg -or -not $sc) { return }
             $d    = [Windows.Duration]::new([TimeSpan]::FromMilliseconds(130))
             $ease = [Windows.Media.Animation.CubicEase]::new()
-            $a  = [Windows.Media.Animation.ColorAnimation]::new([Windows.Media.Color]::FromRgb(0xF5,0xC2,0x00), $d)
+            $a  = [Windows.Media.Animation.ColorAnimation]::new([Windows.Media.Color]::FromRgb(0x2E,0x9E,0xF0), $d)
             $bg.BeginAnimation([Windows.Media.SolidColorBrush]::ColorProperty, $a)
             $ax = [Windows.Media.Animation.DoubleAnimation]::new(1.06, $d); $ax.EasingFunction = $ease
             $sc.BeginAnimation([Windows.Media.ScaleTransform]::ScaleXProperty, $ax)
@@ -797,7 +790,7 @@ foreach ($cat in $Categories) {
                 $ao = [Windows.Media.Animation.DoubleAnimation]::new(0.9, $d)
                 $glw.BeginAnimation([Windows.Media.Effects.DropShadowEffect]::OpacityProperty, $ao)
             }
-            $b.Foreground = [Windows.Media.Brushes]::Black
+            $b.Foreground = [Windows.Media.Brushes]::White
         })
 
         $btn.Add_MouseLeave({
@@ -808,7 +801,7 @@ foreach ($cat in $Categories) {
             if (-not $bg -or -not $sc) { return }
             $d    = [Windows.Duration]::new([TimeSpan]::FromMilliseconds(180))
             $ease = [Windows.Media.Animation.CubicEase]::new()
-            $a  = [Windows.Media.Animation.ColorAnimation]::new([Windows.Media.Color]::FromRgb(0x1A,0x12,0x00), $d)
+            $a  = [Windows.Media.Animation.ColorAnimation]::new([Windows.Media.Color]::FromRgb(0xF2,0xF9,0xFF), $d)
             $bg.BeginAnimation([Windows.Media.SolidColorBrush]::ColorProperty, $a)
             $ax = [Windows.Media.Animation.DoubleAnimation]::new(1.0, $d); $ax.EasingFunction = $ease
             $sc.BeginAnimation([Windows.Media.ScaleTransform]::ScaleXProperty, $ax)
@@ -820,7 +813,7 @@ foreach ($cat in $Categories) {
                 $ao = [Windows.Media.Animation.DoubleAnimation]::new(0.0, $d)
                 $glw.BeginAnimation([Windows.Media.Effects.DropShadowEffect]::OpacityProperty, $ao)
             }
-            $b.Foreground = [Windows.Media.BrushConverter]::new().ConvertFrom("#F3E5F5")
+            $b.Foreground = [Windows.Media.BrushConverter]::new().ConvertFrom("#14304A")
         })
 
         $btn.Add_PreviewMouseDown({
@@ -850,9 +843,13 @@ foreach ($cat in $Categories) {
             $tName      = ($clickedBtn.Content.Children[0]).Text
             $tData      = $ToolData | Where-Object { $_.Name -eq $tName } | Select-Object -First 1
 
+            if (-not (Show-TosDialog)) {
+                Write-Log "TOS declined - $tName launch cancelled."
+                return
+            }
+
             $clickedBtn.IsEnabled = $false
 
-            # Smooth press-down animation, then run action after UI has painted
             $sc = $clickedBtn.Tag
             if ($sc) {
                 $dPress = [Windows.Duration]::new([TimeSpan]::FromMilliseconds(80))
@@ -862,7 +859,6 @@ foreach ($cat in $Categories) {
                 $sc.BeginAnimation([Windows.Media.ScaleTransform]::ScaleYProperty, $ayP)
             }
 
-            # Defer actual work so the press animation renders first
             $script:timer = [Windows.Threading.DispatcherTimer]::new()
             $script:timer.Interval = [TimeSpan]::FromMilliseconds(100)
             $script:timerBtn  = $clickedBtn
@@ -871,7 +867,6 @@ foreach ($cat in $Categories) {
             $script:timer.Add_Tick({
                 $script:timer.Stop()
 
-                # Animate back to resting state
                 $sc2 = $script:timerBtn.Tag
                 if ($sc2) {
                     $dRel = [Windows.Duration]::new([TimeSpan]::FromMilliseconds(150))
@@ -882,11 +877,11 @@ foreach ($cat in $Categories) {
                     $sc2.BeginAnimation([Windows.Media.ScaleTransform]::ScaleYProperty, $ayR)
                     $bg2 = $script:timerBtn.Background
                     if ($bg2) {
-                        $aC = [Windows.Media.Animation.ColorAnimation]::new([Windows.Media.Color]::FromRgb(0x1A,0x12,0x00), $dRel)
+                        $aC = [Windows.Media.Animation.ColorAnimation]::new([Windows.Media.Color]::FromRgb(0xF2,0xF9,0xFF), $dRel)
                         $bg2.BeginAnimation([Windows.Media.SolidColorBrush]::ColorProperty, $aC)
                     }
                 }
-                $script:timerBtn.Foreground = [Windows.Media.BrushConverter]::new().ConvertFrom("#F3E5F5")
+                $script:timerBtn.Foreground = [Windows.Media.BrushConverter]::new().ConvertFrom("#14304A")
 
                 if ($script:timerData.Type -eq "Link") {
                     Start-Process $script:timerData.URL
@@ -895,7 +890,6 @@ foreach ($cat in $Categories) {
                 } elseif ($script:timerData.Type -eq "Cmd") {
                     Set-Status "Running" "Launching $script:timerName..." "BUSY"
                     Write-Log "Starting: $script:timerName"
-                    # Run Cmd in background too so UI never blocks
                     $rsc = [runspacefactory]::CreateRunspace()
                     $rsc.ApartmentState = "STA"; $rsc.ThreadOptions = "ReuseThread"; $rsc.Open()
                     $rsc.SessionStateProxy.SetVariable("timerData",    $script:timerData)
@@ -931,7 +925,6 @@ foreach ($cat in $Categories) {
                     })
                     $null = $psc.BeginInvoke()
                 } else {
-                # Downloads run in background runspace so UI stays responsive
                 Set-Status "Downloading" "Fetching $script:timerName..." "BUSY"
                 Write-Log "Starting download: $script:timerName"
 
@@ -940,7 +933,6 @@ foreach ($cat in $Categories) {
                 $rs.ThreadOptions  = "ReuseThread"
                 $rs.Open()
 
-                # Pass everything needed into the runspace
                 $rs.SessionStateProxy.SetVariable("tData",      $script:timerData)
                 $rs.SessionStateProxy.SetVariable("installDir", $installDir)
                 $rs.SessionStateProxy.SetVariable("dispatcher", $script:timerBtn.Dispatcher)
@@ -991,7 +983,7 @@ foreach ($cat in $Categories) {
                             $owner    = $urlParts[0]
                             $repo     = $urlParts[1]
                             $apiUrl   = "https://api.github.com/repos/$owner/$repo/releases/latest"
-                            $headers  = @{ "User-Agent" = "CheesySSTool" }
+                            $headers  = @{ "User-Agent" = "WinterSStools" }
                             $release  = Invoke-RestMethod -Uri $apiUrl -Headers $headers -ErrorAction Stop
                             $asset    = $release.assets | Where-Object { $_.name -match "\.(zip|exe)$" } | Select-Object -First 1
                             if (-not $asset) { throw "No downloadable asset found." }
@@ -1016,7 +1008,6 @@ foreach ($cat in $Categories) {
                         if ($fileName -match "\.zip$") {
                             Write-LogBg "Extracting..."
                             Expand-Archive -Path $destFile -DestinationPath $destDir -Force -ErrorAction Stop
-                            # Find and launch exe
                             $exe = Get-ChildItem -Path $destDir -Filter "*.exe" -Recurse | Select-Object -First 1
                             if ($exe) {
                                 Write-LogBg "Launching $($exe.Name)..."
@@ -1049,35 +1040,14 @@ foreach ($cat in $Categories) {
     }
 
     $scroll.Content = $wrap
-    $tab.Content    = $scroll
-    $ToolsTab.Items.Add($tab) | Out-Null
+    $CategoryPagesHost.Children.Add($scroll) | Out-Null
+    $script:categoryPages[$cat] = $scroll
 }
 
-
-# CAT ANIMATION
-
-$catFrames = @(
-    "   /\_____/\  `n  /  ^   ^  \ `n (  =  w  =  )`n  \  (___) / `n  /  |   |  \ `n (__|   |__)",
-    "   /\_____/\  `n  /  -   ^  \ `n (  =  w  =  )`n  \  (___) / `n  /  |   |  \ `n (__|   |__)",
-    "   /\_____/\  `n  /  -   -  \ `n (  =  w  =  )`n  \  (___) / `n  /  |   |  \ `n (__|   |__)",
-    "   /\_____/\  `n  /  ^   -  \ `n (  =  w  =  )`n  \  (___) / `n  /  |   |  \ `n (__|   |__)"
-)
-$script:catIdx = 0
-$catTimer = New-Object System.Windows.Threading.DispatcherTimer
-$catTimer.Interval = [TimeSpan]::FromMilliseconds(900)
-$catTimer.Add_Tick({
-    $script:catIdx = ($script:catIdx + 1) % $catFrames.Count
-    $CatBlock.Text = $catFrames[$script:catIdx]
-})
-$catTimer.Start()
-
-
-
-
-# EVENTS
+Select-Category -Category $Categories[0]
 
 $window.Add_MouseLeftButtonDown({ try { $window.DragMove() } catch {} })
-$CloseBtn.Add_Click({ $catTimer.Stop(); $window.Close() })
+$CloseBtn.Add_Click({ $window.Close() })
 $MinBtn.Add_Click({ $window.WindowState = "Minimized" })
 
 $OpenFolderBtn.Add_Click({
